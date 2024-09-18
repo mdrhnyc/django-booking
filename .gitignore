@@ -1,0 +1,23 @@
+# Virtual environment
+venv/
+*.pyc
+__pycache__/
+
+# Database
+db.sqlite3
+
+# Django settings (if you have sensitive data here, like secrets)
+*.env
+
+# Static files
+staticfiles/
+
+# VSCode settings (optional)
+.vscode/
+
+# Node.js related (if any)
+node_modules/
+
+# IDEs and editors
+*.swp
+
