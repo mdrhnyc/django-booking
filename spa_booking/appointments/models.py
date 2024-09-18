@@ -70,3 +70,16 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"Booking for {self.customer} on {self.date} at {self.time}"
+
+
+class BookingSerializer(serializers.ModelSerializer):
+    service_name = serializers.CharField(source='service.name')
+    customer_first_name = serializers.CharField(source='customer.first_name')
+    customer_last_name = serializers.CharField(source='customer.last_name')
+    service_provider_first_name = serializers.CharField(source='service_provider.first_name')
+    service_provider_last_name = serializers.CharField(source='service_provider.last_name')
+
+
+    class Meta:
+        model = Booking
+        fields = ['service_name', 'customer_first_name', 'customer_last_name', 'service_provider_first_name', 'service_provider_last_name', 'date', 'time']
