@@ -50,6 +50,12 @@ class ServiceProvider(models.Model):
         return f"{self.first_name} {self.last_name}"
 
 
+class ServiceProviderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServiceProvider
+        fields = ['first_name', 'last_name', 'gender', 'phone', 'email', 'start_date']
+
+
 class Customer(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
