@@ -1,7 +1,8 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Service, Booking, ServiceProvider, ServiceSerializer, BookingSerializer, ServiceProviderSerializer, BookingCreateSerializer
+from .models import Service, Booking, ServiceProvider
+from .serializers import ServiceSerializer, BookingSerializer, ServiceProviderSerializer, BookingCreateSerializer
 from .utils import send_confirmation_email 
 
 # A simple API to get services
