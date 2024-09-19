@@ -53,7 +53,7 @@ class ServiceProvider(models.Model):
 class ServiceProviderSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceProvider
-        fields = ['first_name', 'last_name', 'gender', 'phone', 'email', 'start_date']
+        fields = ['id', 'first_name', 'last_name', 'gender', 'phone', 'email', 'start_date']
 
 
 class Customer(models.Model):
@@ -88,4 +88,35 @@ class BookingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Booking
-        fields = ['service_name', 'customer_first_name', 'customer_last_name', 'service_provider_first_name', 'service_provider_last_name', 'date', 'time']
+        fields = ['id', 'service_name', 'customer_first_name', 'customer_last_name', 'service_provider_first_name', 'service_provider_last_name', 'date', 'time']
+
+
+# appointments/serializers.py
+class BookingCreateSerializer(serializers.ModelSerializer):
+    customer_first_name = serializers.CharField(write_only=True)
+    customer_last_name = serializers.CharField(write_only=True)
+    customer_email = serializers.EmailField(write_only=True)
+
+    class Meta:
+        model = Booking
+        fields = ['service', 'service_provider', 'date', 'time', 'customer_first_name', 'customer_last_name', 'customer_email']
+
+    def create(self, validated_data):
+        # Extract customer data from the validated data
+        customer_first_name = validated_data.pop('customer_first_name')
+        customer_last_name = validated_data.pop('customer_last_name')
+        customer_email = validated_data.pop('customer_email')
+        
+
+        # Create or retrieve the customer by email (ensure uniqueness)
+        customer, created = Customer.objects.get_or_create(
+            email=customer_email,
+            defaults={
+                'first_name': customer_first_name,
+                'last_name': customer_last_name
+            }
+        )
+
+        # Create booking with the customer
+        booking = Booking.objects.create(customer=customer, **validated_data)
+        return booking
