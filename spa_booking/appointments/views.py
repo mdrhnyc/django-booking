@@ -2,6 +2,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Service, Booking, ServiceProvider, ServiceSerializer, BookingSerializer, ServiceProviderSerializer, BookingCreateSerializer
+from .utils import send_confirmation_email 
 
 # A simple API to get services
 @api_view(['GET'])
@@ -24,7 +25,13 @@ def create_booking_view(request):
     if request.method == 'POST':
         serializer = BookingCreateSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            booking = serializer.save()
+            
+            customer_email = booking.customer.email  # Adjust based on your serializer fields
+            booking_details = f"Booking ID: {booking.id}\nService: {booking.service}\nDate: {booking.date}\nTime: {booking.time}"
+            
+            send_confirmation_email(customer_email, booking_details)
+            
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
