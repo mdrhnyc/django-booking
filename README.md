@@ -69,3 +69,9 @@ A simple **Django backend** for managing bookings, services, providers, and cust
 - **DELETE** `/api/customers/<id>/`: Remove a customer
 
    ```
+
+### License
+
+This project is licensed under the MIT License.
+
+
